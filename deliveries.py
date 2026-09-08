@@ -10,10 +10,8 @@ def create_delivery(user: User, package_name, destination, weight):
     delivery = Delivery.create(owner=user,package_name=package_name,destination=destination,weight=weight,status="Waiting")
     return delivery
 
-
 def get_user_deliveries(user):
     return list(user.deliveries)
-
 
 def update_delivery_status(user: User, delivery_id, new_status):
     allowed_statuses = ["Waiting", "In Transit", "Delivered", "Cancelled"]
