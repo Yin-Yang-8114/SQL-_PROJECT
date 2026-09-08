@@ -4,7 +4,6 @@ from models import User
 from peewee import *
 
 def ask_password() -> str:
-    
     password = questionary.text("Enter your password: ").ask()
     return password
 
@@ -13,7 +12,6 @@ def ask_username() -> str:
     return username
 
 def hashing_pass(password):
-
     password_bytes = password.encode('utf-8')
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password_bytes, salt)
@@ -34,13 +32,11 @@ def register_user(username: str, password: str) -> User:
 
     if User.select().where(User.username == username).exists():
         raise ValueError("Username already exists")
-    
     hashed_password = hashing_pass(password)
     new_user = User.create(username=username, password_hash=hashed_password)
     return new_user
 
 def login_user(username: str, password: str) -> User | None:
-
     user = User.get_or_none(User.username == username)
     if not user:
         raise ValueError("Not found username")
