@@ -11,7 +11,6 @@ class User(BaseModel):
     username = CharField(unique=True)
     password_hash = CharField()
     created_at = DateTimeField(default=datetime.now)
-
     class Meta:
         table_name = "users"
 
