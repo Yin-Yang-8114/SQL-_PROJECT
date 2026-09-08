@@ -41,6 +41,6 @@ def login_user(username: str, password: str) -> User | None:
     if not user:
         raise ValueError("Not found username")
     if verify_pass(password, user.password_hash):
-        return user.username
+        return user
     return None
 
