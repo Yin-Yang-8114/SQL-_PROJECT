@@ -5,15 +5,13 @@ def create_delivery(user: User, package_name, destination, weight):
         raise ValueError("Package name cannot be empty.")
     if not destination:
         raise ValueError("Destination cannot be empty.")
-    if weight <= 0:
+    if float(weight) <= 0:
         raise ValueError("Weight must be greater than 0.")
     delivery = Delivery.create(owner=user,package_name=package_name,destination=destination,weight=weight,status="Waiting")
     return delivery
 
-
 def get_user_deliveries(user):
     return list(user.deliveries)
-
 
 def update_delivery_status(user: User, delivery_id, new_status):
     allowed_statuses = ["Waiting", "In Transit", "Delivered", "Cancelled"]
