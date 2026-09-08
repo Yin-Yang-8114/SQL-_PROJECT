@@ -1,60 +1,82 @@
 import questionary
-from models import Delivery
 from auth import ask_username, ask_password, login_user, register_user
-from deliveries import *
+from deliveries import create_delivery, get_user_deliveries, update_delivery_status, delete_delivery
 
 def display_main_menu():
-
     while True:
-
-        ans = questionary.select("\n=== SPACE DELIVERY MANAGER ===\n", choices=["Register", "Login", "Exit"]).ask()
-
+        ans = questionary.select(
+            "\n=== SPACE DELIVERY MANAGER ===\n",
+            choices=["Register", "Login", "Exit"]).ask()
         if ans == "Register":
             username = ask_username()
             password = ask_password()
-            register_user(username, password)
-
+            try:
+                register_user(username, password)
+                print("Registration successful!")
+            except ValueError as e:
+                print(e)
         elif ans == "Login":
             username = ask_username()
             password = ask_password()
-            user = login_user(username, password)
-
-            if  user:
-                print("Seccessful login!")
-
-                ans = questionary.select(f"Welcome, {user.username}!\n", choices=["Create delivery", "Show my deliveries", "Update delivery status", "Delete delivery", "Logout"]).ask()
-
-                if ans == "Create delivery":
-                    package_name = questionary.text("Enter package name: ").ask()
-                    destination = questionary.text("Enter destination:").ask()
-                    weight = questionary.text("Enter package weight: ").ask()
-                    create_delivery(user, package_name, destination, weight)
-                    print("Added successfully")
-                    
-                elif ans == "Show my deliveries":
-                    print(get_user_deliveries(user))
-
-                elif ans =="Update delivery status":
-                    delivery_id = questionary.text("Enter delivery ID:").ask()
-                    new_status = questionary.select("Choose new status to update", choices=["Waiting", "In Transit", "Delivered", "Cancelled"]).ask()
-                    res = update_delivery_status(user, delivery_id, new_status) 
-                    if res:
-                        print("Updated successfully")
-                    else:
-                        print("You must be delivery's owner to update!")
-
-                elif ans == "Delete delivery":
-                    delivery_id = questionary.text("Enter delivery ID:").ask()
-                    res = delete_delivery(user, delivery_id)
-                    if res:
-                        print("Deleted successfully")
-                    else:
-                        print("You must be delivery's owner to delete!")
-
-                elif ans == "Logout":
-                    user = None
-
+            try:
+                user = login_user(username, password)
+                if user:
+                    print("Successful login!")
+                    while True:
+                        ans = questionary.select(
+                            f"\nWelcome, {user.username}!\n",
+                            choices=["Create delivery", "Show my deliveries", "Update delivery status","Delete delivery", "Logout"]).ask()
+                        if ans == "Create delivery":
+                            package_name = questionary.text("Enter package name: ").ask()
+                            destination = questionary.text("Enter destination:").ask()
+                            weight = questionary.text("Enter package weight: ").ask()
+                            try:
+                                create_delivery(user, package_name, destination, float(weight))
+                                print("Added successfully!")
+                            except ValueError as e:
+                                print(e)
+                        elif ans == "Show my deliveries":
+                            deliveries = get_user_deliveries(user)
+                            if not deliveries:
+                                print("You do not have any deliveries.")[cite: 1]
+                            else:
+                                for d in deliveries:
+                                    print(
+                                        f"\nID: {d.id}\nPackage: {d.package_name}\nDestination: {d.destination}\nWeight: {d.weight}\nStatus: {d.status}")
+                                    print("-" * 20)
+                        elif ans == "Update delivery status":
+                            delivery_id = questionary.text("Enter delivery ID:").ask()
+                            new_status = questionary.select(
+                                "Choose new status to update",
+                                choices=["Waiting", "In Transit", "Delivered", "Cancelled"]).ask()
+                            try:
+                                res = update_delivery_status(user, int(delivery_id), new_status)
+                                if res:
+                                    print("Updated successfully.")
+                                else:
+                                    print("You cannot modify this delivery or it does not exist.")[cite: 1]
+                            except ValueError:
+                                print("Invalid delivery ID.")[cite: 1]
+                        elif ans == "Delete delivery":
+                            delivery_id = questionary.text("Enter delivery ID:").ask()
+                            try:
+                                res = delete_delivery(user, int(delivery_id))
+                                if res:
+                                    print("Deleted successfully.")
+                                else:
+                                    print("You cannot modify this delivery or it does not exist.")[cite: 1]
+                            except ValueError:
+                                print("Invalid delivery ID.")[cite: 1]
+                        elif ans == "Logout":
+                            print("Logged out successfully.")[cite: 1]
+                            break
+                else:
+                    print("Login failed. Incorrect username or password.")
+            except ValueError as e:
+                print(e)
         elif ans == "Exit":
+            print("Goodbye!")
             return
-            
-display_main_menu()
+
+if __name__ == "__main__":
+    display_main_menu()

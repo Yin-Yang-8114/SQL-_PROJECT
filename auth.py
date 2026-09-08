@@ -23,7 +23,6 @@ def verify_pass(user_password, stored_hash):
  
     return bcrypt.checkpw(password_bytes, stored_hash_bytes)
 
-
 def register_user(username: str, password: str) -> User:
     if len(username)==0:
         raise ValueError("Username cannot be empty ")
