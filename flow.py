@@ -38,7 +38,7 @@ def display_main_menu():
                         elif ans == "Show my deliveries":
                             deliveries = get_user_deliveries(user)
                             if not deliveries:
-                                print("You do not have any deliveries.")[cite: 1]
+                                print("You do not have any deliveries.")
                             else:
                                 for d in deliveries:
                                     print(
@@ -54,9 +54,9 @@ def display_main_menu():
                                 if res:
                                     print("Updated successfully.")
                                 else:
-                                    print("You cannot modify this delivery or it does not exist.")[cite: 1]
+                                    print("You cannot modify this delivery or it does not exist.")
                             except ValueError:
-                                print("Invalid delivery ID.")[cite: 1]
+                                print("Invalid delivery ID.")
                         elif ans == "Delete delivery":
                             delivery_id = questionary.text("Enter delivery ID:").ask()
                             try:
@@ -64,11 +64,11 @@ def display_main_menu():
                                 if res:
                                     print("Deleted successfully.")
                                 else:
-                                    print("You cannot modify this delivery or it does not exist.")[cite: 1]
+                                    print("You cannot modify this delivery or it does not exist.")
                             except ValueError:
-                                print("Invalid delivery ID.")[cite: 1]
+                                print("Invalid delivery ID.")
                         elif ans == "Logout":
-                            print("Logged out successfully.")[cite: 1]
+                            print("Logged out successfully.")
                             break
                 else:
                     print("Login failed. Incorrect username or password.")
