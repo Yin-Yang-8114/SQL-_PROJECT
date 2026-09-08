@@ -26,11 +26,13 @@ def display_main_menu():
                     package_name = questionary.text("Enter package name: ").ask()
                     destination = questionary.text("Enter destination:").ask()
                     weight = questionary.text("Enter package weight: ").ask()
-                    create_delivery(package_name, destination= destination, weight= weight, owner= user.id)
+                    create_delivery(user, package_name, destination, weight)
+                    print("Added successfully")
                     
                 elif ans == "Show my deliveries":
-                    deliverys = list(Delivery.select().where(user.id == Delivery.owner))
-                    print(item.package_name for item in deliverys)
+
+                    print(get_user_deliveries(user))
+                    
 
                 elif ans =="Update delivery status":
                     delivery_id = questionary.text("Enter delivery ID:").ask()

@@ -5,7 +5,7 @@ def create_delivery(user: User, package_name, destination, weight):
         raise ValueError("Package name cannot be empty.")
     if not destination:
         raise ValueError("Destination cannot be empty.")
-    if weight <= 0:
+    if float(weight) <= 0:
         raise ValueError("Weight must be greater than 0.")
     delivery = Delivery.create(owner=user,package_name=package_name,destination=destination,weight=weight,status="Waiting")
     return delivery
